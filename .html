@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dunia Belajar Ceria</title>
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --accent: #FFE66D;
+            --bg: #F7FFF7;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px; /* Ukuran maksimal agar rapi di tablet/PC */
+            background: white;
+            padding: 20px;
+            border-radius: 30px;
+            box-shadow: 0 10px 0px var(--secondary);
+            border: 4px solid #333;
+            text-align: center;
+        }
+
+        /* Navigasi Halaman */
+        .page { display: none; }
+        .active { display: block; animation: pop 0.3s ease; }
+
+        @keyframes pop {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Grid Responsif */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .card {
+            background: #fff;
+            border: 2px solid #ddd;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        /* Tombol yang mudah ditekan di HP */
+        button {
+            width: 100%; /* Full width di mobile */
+            max-width: 250px;
+            padding: 15px;
+            margin: 5px;
+            border-radius: 15px;
+            border: 3px solid #333;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-main { background: var(--accent); }
+        .btn-nav { background: var(--secondary); color: white; }
+
+        /* Canvas Responsif */
+        .canvas-box {
+            background: #eee;
+            border: 2px dashed #999;
+            margin-bottom: 10px;
+            touch-action: none; /* Mencegah layar geser saat menggambar */
+        }
+        canvas { width: 100%; height: 300px; display: block; background: white; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="page1" class="page active">
+        <h1>🌈 Halo!</h1>
+        <input type="text" id="nama" placeholder="Nama kamu..." style="width:80%; padding:10px; margin-bottom:10px; border-radius:10px;">
+        <br>
+        <button class="btn-main" onclick="pindah('page2')">Mulai!</button>
+    </div>
+
+    <div id="page2" class="page">
+        <h2>Pilih Menu</h2>
+        <button class="btn-main" onclick="pindah('page3')">🔢 Berhitung</button>
+        <button class="btn-main" onclick="pindah('page4')">📖 Membaca</button>
+        <button class="btn-main" onclick="pindah('page5')">🎨 Mewarnai</button>
+    </div>
+
+    <div id="page3" class="page">
+        <h2>🔢 Berhitung</h2>
+        <div class="grid">
+            <div class="card">🍎 1 + 1 = 2</div>
+            <div class="card">🍌 2 x 2 = 4</div>
+            <div class="card">🍎 1 Apel</div>
+            <div class="card">🍊 2 Jeruk</div>
+            <div class="card">🍍 3 Nanas</div>
+            <div class="card">🍓 4 Stroberi</div>
+            <div class="card">🐮 1 Sapi</div>
+            <div class="card">🐱 2 Kucing</div>
+        </div>
+        <button class="btn-nav" onclick="pindah('page2')">Kembali</button>
+    </div>
+
+    <div id="page4" class="page">
+        <h2>📖 Membaca</h2>
+        <div class="grid">
+            <div class="card" onclick="speak('Apel')">🍎 A-P-E-L</div>
+            <div class="card" onclick="speak('Meja')">🪑 M-E-J-A</div>
+            <div class="card" onclick="speak('Payung')">🌂 P-A-Y-U-N-G</div>
+            <div class="card" onclick="speak('Lampu')">🔦 L-A-M-P-U</div>
+            <div class="card" onclick="speak('Ular')">🐍 U-L-A-R</div>
+            <div class="card" onclick="speak('Kelinci')">🐰 K-E-L-I-N-C-I</div>
+        </div>
+        <button class="btn-nav" onclick="pindah('page2')">Kembali</button>
+    </div>
+
+    <div id="page5" class="page">
+        <h2>🎨 Mewarnai</h2>
+<div class="palette">
+    <div class="color-dot" style="background: #FF6B6B;" onclick="changeColor('#FF6B6B')"></div>
+    <div class="color-dot" style="background: #4ECDC4;" onclick="changeColor('#4ECDC4')"></div>
+    <div class="color-dot" style="background: #FFE66D;" onclick="changeColor('#FFE66D')"></div>
+    <div class="color-dot" style="background: #1A1A1A;" onclick="changeColor('#1A1A1A')"></div>
+    <div class="color-dot" style="background: #FFFFFF; border: 1px solid #ddd;" onclick="changeColor('#FFFFFF')"></div>
+</div>
+
+<div class="canvas-container" style="border: 2px dashed #ccc; margin: 10px 0; border-radius: 15px; overflow: hidden; touch-action: none;">
+    <canvas id="coloringArea" style="width: 100%; height: 300px; background: white; cursor: crosshair;"></canvas>
+</div>
+
+<div class="canvas-controls">
+    <button class="btn-nav small" onclick="clearCanvas()">Hapus Semua</button>
+    <button class="btn-nav small" onclick="showPage('page2')">Kembali</button>
+</div>
+</div>
+<script>
+    // FUNGSI NAVIGASI YANG BENAR
+    function pindah(idHalaman) {
+        // Sembunyikan semua halaman
+        const semuaHalaman = document.querySelectorAll('.page');
+        semuaHalaman.forEach(hal => hal.classList.remove('active'));
+        
+        // Tampilkan halaman yang dipilih
+        document.getElementById(idHalaman).classList.add('active');
+
+        // Jika ke halaman mewarnai, aktifkan canvas
+        if(idHalaman === 'page5') startCanvas();
+    }
+
+    // LOGIKA MEWARNAI SEDERHANA
+    function startCanvas() {
+        const cvs = document.getElementById('gambar');
+        const ctx = cvs.getContext('2d');
+        cvs.width = cvs.offsetWidth;
+        cvs.height = cvs.offsetHeight;
+
+        let menggambar = false;
+
+        function pos(e) {
+            const rect = cvs.getBoundingClientRect();
+            return {
+                x: (e.clientX || e.touches[0].clientX) - rect.left,
+                y: (e.clientY || e.touches[0].clientY) - rect.top
+            };
+        }
+
+        function mulai(e) { menggambar = true; lukis(e); }
+        function selesai() { menggambar = false; ctx.beginPath(); }
+
+        function lukis(e) {
+            if(!menggambar) return;
+            const p = pos(e);
+            ctx.lineWidth = 5;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#FF6B6B';
+            ctx.lineTo(p.x, p.y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+        }
+
+        cvs.onmousedown = mulai;
+        cvs.onmouseup = selesai;
+        cvs.onmousemove = lukis;
+        cvs.ontouchstart = mulai;
+        cvs.ontouchend = selesai;
+        cvs.ontouchmove = lukis;
+    }
+</script>
+
+</body>
+</html>
